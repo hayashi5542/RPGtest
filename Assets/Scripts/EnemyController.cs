@@ -1,17 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using anogamelib;
 
 public class EnemyController : StateMachineBase<EnemyController>
 {
     private Transform target;
+    private Animator animator;
+    private UnityEvent AttackHitHandler = new UnityEvent();
+    private UnityEvent AttackEndHandler = new UnityEvent();
     private void Start()
     {
         System.Type type = typeof(UnitController);
         target = (GameObject.FindObjectOfType(type) as UnitController).transform;
+        animator = GetComponent<Animator>();
         SetState(new EnemyController.Idol(this));
-
+        
+    }
+    public void OnAttackHit()
+    {
+        Debug.Log("OnAttackHit");
+        AttackHitHandler.Invoke();
+    }
+    public void OnAttackEnd()
+    {
+        Debug.Log("OnAttackEnd");
+        AttackEndHandler.Invoke();
     }
 
     private class Idol : StateBase<EnemyController>
@@ -22,6 +37,7 @@ public class EnemyController : StateMachineBase<EnemyController>
         public override void OnEnterState()
         {
             base.OnEnterState();
+            machine.animator.SetInteger("battle", 0);
             Debug.Log("Idol");
         }
 
@@ -38,18 +54,26 @@ public class EnemyController : StateMachineBase<EnemyController>
 
     private class Find : StateBase<EnemyController>
     {
+        private float timer;
         public Find(EnemyController _machine) : base(_machine)
         {
         }
         public override void OnEnterState()
         {
             base.OnEnterState();
+            machine.animator.SetInteger("battle", 1);
             Debug.Log("Find");
         }
         public override void OnUpdateState()
         {
-            base.OnUpdateState();
+            //base.OnUpdateState();
+            timer += Time.deltaTime;
             float f_distance = (machine.transform.position - machine.target.position).magnitude;
+            if(timer > 3)
+            {
+                machine.SetState(new EnemyController.Attack(machine));
+            }
+
             if(f_distance > 3)
             {
                 machine.SetState(new EnemyController.Idol(machine));
@@ -58,5 +82,35 @@ public class EnemyController : StateMachineBase<EnemyController>
                        
         }
 
+    }
+
+    private class Attack : StateBase<EnemyController>
+    {
+        public Attack(EnemyController _machine) : base(_machine)
+        {
+        }
+
+        public override void OnEnterState()
+        {
+            machine.AttackHitHandler.AddListener(() =>
+            {
+                Debug.Log("Attack>Player");
+            });
+
+            machine.AttackEndHandler.AddListener(() =>
+            {
+                machine.SetState(new EnemyController.Find(machine));
+            }); 
+            
+            base.OnEnterState();
+            machine.animator.SetTrigger("AttackTrigger");
+            Debug.Log("Attack");
+        }
+        public override void OnExitState()
+        {
+            machine.AttackHitHandler.RemoveAllListeners();
+            machine.AttackEndHandler.RemoveAllListeners();
+            //base.OnExitState();
+        }
     }
 }
