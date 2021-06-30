@@ -24,11 +24,7 @@ public class EnemyController : StateMachineBase<EnemyController>
             base.OnEnterState();
             Debug.Log("Idol");
         }
-        /*public override void OnExitState()
-        {
-            base.OnExitState();
-            Debug.Log("");
-        }*/
+
         public override void OnUpdateState()
         {
             float f_distance = (machine.transform.position - machine.target.position).magnitude;
@@ -53,12 +49,14 @@ public class EnemyController : StateMachineBase<EnemyController>
         public override void OnUpdateState()
         {
             base.OnUpdateState();
-            Debug.Log("Find.onUpdateState");
+            float f_distance = (machine.transform.position - machine.target.position).magnitude;
+            if(f_distance > 3)
+            {
+                machine.SetState(new EnemyController.Idol(machine));
+                //Debug.Log("Find.onUpdateState");
+            }
+                       
         }
-        /*public override void OnExitState()
-        {
-            base.OnExitState();
-            Debug.Log("NoFind");
-        }*/
+
     }
 }
