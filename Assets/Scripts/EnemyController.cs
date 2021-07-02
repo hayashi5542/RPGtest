@@ -6,8 +6,9 @@ using anogamelib;
 
 public class EnemyController : StateMachineBase<EnemyController>
 {
-    private Transform target;
+    public Transform target;
     private Animator animator;
+    private GameObject player;
     private UnityEvent AttackHitHandler = new UnityEvent();
     private UnityEvent AttackEndHandler = new UnityEvent();
     private void Start()
@@ -16,6 +17,7 @@ public class EnemyController : StateMachineBase<EnemyController>
         target = (GameObject.FindObjectOfType(type) as UnitController).transform;
         animator = GetComponent<Animator>();
         SetState(new EnemyController.Idol(this));
+        //player = GameObject.Find("RPGHeroPBR");
         
     }
     public void OnAttackHit()
@@ -62,6 +64,8 @@ public class EnemyController : StateMachineBase<EnemyController>
         {
             base.OnEnterState();
             machine.animator.SetInteger("battle", 1);
+            
+            machine.transform.LookAt(machine.target);
             Debug.Log("Find");
         }
         public override void OnUpdateState()
@@ -102,7 +106,7 @@ public class EnemyController : StateMachineBase<EnemyController>
                 machine.SetState(new EnemyController.Find(machine));
             }); 
             
-            base.OnEnterState();
+            //base.OnEnterState();
             machine.animator.SetTrigger("AttackTrigger");
             Debug.Log("Attack");
         }
