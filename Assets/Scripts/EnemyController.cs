@@ -8,7 +8,7 @@ public class EnemyController : StateMachineBase<EnemyController>
 {
     public Transform target;
     private Animator animator;
-    private GameObject player;
+    //private GameObject player;
     private UnityEvent AttackHitHandler = new UnityEvent();
     private UnityEvent AttackEndHandler = new UnityEvent();
     private void Start()
@@ -40,6 +40,7 @@ public class EnemyController : StateMachineBase<EnemyController>
         {
             base.OnEnterState();
             machine.animator.SetInteger("battle", 0);
+            //machine.animator.SetInteger("battle", 0);
             Debug.Log("Idol");
         }
 
@@ -64,14 +65,17 @@ public class EnemyController : StateMachineBase<EnemyController>
         {
             base.OnEnterState();
             machine.animator.SetInteger("battle", 1);
+            //machine.animator.SetBool("Smash Attack", true);
+            //machine.animator.SetInteger("battle", 1);
             
-            machine.transform.LookAt(machine.target);
+            
             Debug.Log("Find");
         }
         public override void OnUpdateState()
         {
             //base.OnUpdateState();
             timer += Time.deltaTime;
+            machine.transform.LookAt(machine.target);
             float f_distance = (machine.transform.position - machine.target.position).magnitude;
             if(timer > 3)
             {
