@@ -11,12 +11,15 @@ public class EnemyController : StateMachineBase<EnemyController>
     //private GameObject player;
     private UnityEvent AttackHitHandler = new UnityEvent();
     private UnityEvent AttackEndHandler = new UnityEvent();
+    public int HP;
     private void Start()
     {
         System.Type type = typeof(UnitController);
         target = (GameObject.FindObjectOfType(type) as UnitController).transform;
         animator = GetComponent<Animator>();
         SetState(new EnemyController.Idol(this));
+        EnemyManager.Instance.Add(this);
+        HP = 5;
         //player = GameObject.Find("RPGHeroPBR");
         
     }
@@ -31,6 +34,16 @@ public class EnemyController : StateMachineBase<EnemyController>
         AttackEndHandler.Invoke();
     }
 
+    public bool isFind()
+    {
+        float f_distance = (transform.position - target.position).magnitude;
+        return f_distance < 3;
+    }
+
+    public void Damage(int damage)
+    {
+        HP -= damage;
+    }
     private class Idol : StateBase<EnemyController>
     {
         public Idol(EnemyController _machine) : base(_machine)
@@ -46,8 +59,7 @@ public class EnemyController : StateMachineBase<EnemyController>
 
         public override void OnUpdateState()
         {
-            float f_distance = (machine.transform.position - machine.target.position).magnitude;
-            if (f_distance < 3)
+            if (machine.isFind())
             {
                 machine.SetState(new EnemyController.Find(machine));
             }
@@ -81,8 +93,7 @@ public class EnemyController : StateMachineBase<EnemyController>
             {
                 machine.SetState(new EnemyController.Attack(machine));
             }
-
-            if(f_distance > 3)
+           else if(machine.isFind() == false)
             {
                 machine.SetState(new EnemyController.Idol(machine));
                 //Debug.Log("Find.onUpdateState");

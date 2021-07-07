@@ -7,13 +7,13 @@ public class ParamGauge : MonoBehaviour
 {
     [SerializeField]
     private Slider slider;
-    public void init(int current, int max)
+    public void Init(int current, int max)
     {
         slider.maxValue = max;
-        set(current);
+        Set(current);
     }
 
-    public void set(int current)
+    public void Set(int current)
     {
         slider.value = current;
     }

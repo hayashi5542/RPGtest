@@ -36,7 +36,7 @@ public class DataManeger : Singleton<DataManeger>
         {
             Debug.Log(e.Enemy_name);
         }
-        HPgauge.init(unitParam.HP_current,unitParam.HP_max);
-        EXPgauge.init(unitParam.EXP_current, unitParam.EXP_max);
+        HPgauge.Init(unitParam.HP_current,unitParam.HP_max);
+        EXPgauge.Init(unitParam.EXP_current, unitParam.EXP_max);
     }
 }
