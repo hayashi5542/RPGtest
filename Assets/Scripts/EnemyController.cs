@@ -20,7 +20,6 @@ public class EnemyController : StateMachineBase<EnemyController>
         SetState(new EnemyController.Idol(this));
         EnemyManager.Instance.Add(this);
         HP = 5;
-        //player = GameObject.Find("RPGHeroPBR");
         
     }
     public void OnAttackHit()
@@ -36,6 +35,10 @@ public class EnemyController : StateMachineBase<EnemyController>
 
     public bool isFind()
     {
+        if(HP <= 0)
+        {
+            return false;
+        }
         float f_distance = (transform.position - target.position).magnitude;
         return f_distance < 3;
     }
@@ -43,7 +46,23 @@ public class EnemyController : StateMachineBase<EnemyController>
     public void Damage(int damage)
     {
         HP -= damage;
+
+        /*if(HP <= 0)
+        {
+            animator.SetTrigger("Die");
+            Debug.Log("Die");
+        }*/
     }
+
+    public bool DieMotion()
+    {
+        if(HP <= 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
     private class Idol : StateBase<EnemyController>
     {
         public Idol(EnemyController _machine) : base(_machine)
@@ -79,8 +98,8 @@ public class EnemyController : StateMachineBase<EnemyController>
             machine.animator.SetInteger("battle", 1);
             //machine.animator.SetBool("Smash Attack", true);
             //machine.animator.SetInteger("battle", 1);
-            
-            
+
+
             Debug.Log("Find");
         }
         public override void OnUpdateState()
@@ -89,7 +108,13 @@ public class EnemyController : StateMachineBase<EnemyController>
             timer += Time.deltaTime;
             machine.transform.LookAt(machine.target);
             float f_distance = (machine.transform.position - machine.target.position).magnitude;
-            if(timer > 3)
+
+
+            if (machine.DieMotion() == true)
+            {
+                machine.SetState(new EnemyController.Die(machine));
+            }
+            else if (timer > 3)
             {
                 machine.SetState(new EnemyController.Attack(machine));
             }
@@ -130,6 +155,21 @@ public class EnemyController : StateMachineBase<EnemyController>
             machine.AttackHitHandler.RemoveAllListeners();
             machine.AttackEndHandler.RemoveAllListeners();
             //base.OnExitState();
+        }
+    }
+
+    private class Die : StateBase<EnemyController>
+    {
+        public Die(EnemyController _machine) : base(_machine)
+        {
+        }
+        public override void OnEnterState()
+        {
+            //base.OnEnterState();
+            machine.animator.SetTrigger("DieTrigger");
+            machine.animator.SetTrigger("ExitTrigger");
+            //Destroy();
+            Debug.Log("Die");
         }
     }
 }
