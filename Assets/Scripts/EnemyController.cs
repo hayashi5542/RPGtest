@@ -114,7 +114,7 @@ public class EnemyController : StateMachineBase<EnemyController>
             {
                 machine.SetState(new EnemyController.Die(machine));
             }
-            else if (timer > 3)
+            else if (timer > 1)
             {
                 machine.SetState(new EnemyController.Attack(machine));
             }
@@ -160,6 +160,8 @@ public class EnemyController : StateMachineBase<EnemyController>
 
     private class Die : StateBase<EnemyController>
     {
+        private float Die_timer;
+        //private GameObject break_effect;
         public Die(EnemyController _machine) : base(_machine)
         {
         }
@@ -168,8 +170,19 @@ public class EnemyController : StateMachineBase<EnemyController>
             //base.OnEnterState();
             machine.animator.SetTrigger("DieTrigger");
             machine.animator.SetTrigger("ExitTrigger");
-            //Destroy();
+            Destroy(machine.gameObject, 4.0f);
+            //GameObject effect = Instantiate(break_effect) as GameObject;
             Debug.Log("Die");
         }
+
+        /*public override void OnUpdateState()
+        {
+            base.OnUpdateState();
+            Die_timer += Time.deltaTime;
+            //if(Die_timer > 3)
+            //{
+                //Destroy(machine.gameObject);
+            //}
+        }*/
     }
 }

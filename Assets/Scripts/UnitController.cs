@@ -81,7 +81,7 @@ public class UnitController : StateMachineBase<UnitController>
         {
             base.OnUpdateState();
             timer += Time.deltaTime;
-            if (timer > 3)
+            if (timer > 1)
             {
                 machine.SetState(new UnitController.Attack(machine, enemy));
             }
@@ -126,6 +126,7 @@ public class UnitController : StateMachineBase<UnitController>
             machine.AttackEndHandler.RemoveAllListeners();
             //base.OnExitState();
         }
+
+
     }
-    //}
 }
