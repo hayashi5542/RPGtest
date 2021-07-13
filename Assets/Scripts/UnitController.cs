@@ -65,6 +65,7 @@ public class UnitController : StateMachineBase<UnitController>
     {
         private EnemyController enemy;
         private float timer;
+        public GameObject mode;
 
         public Battle(UnitController machine, EnemyController enemy):base(machine)
         {
@@ -76,10 +77,12 @@ public class UnitController : StateMachineBase<UnitController>
         {
             base.OnEnterState();
             Debug.Log("Battle");
+            //machine.GetComponent<UnitMover>().enabled = false;
         }
         public override void OnUpdateState()
         {
             base.OnUpdateState();
+            
             timer += Time.deltaTime;
             if (timer > 1)
             {
@@ -88,6 +91,7 @@ public class UnitController : StateMachineBase<UnitController>
             else if (machine.Find_Enemy(ref enemy) == false)
             {
                 machine.SetState(new UnitController.Idle(machine));
+                machine.GetComponent<UnitMover>().enabled = true;
                 //Debug.Log("Find.onUpdateState");
             }
         }
@@ -106,6 +110,7 @@ public class UnitController : StateMachineBase<UnitController>
         public override void OnEnterState()
         {
             base.OnEnterState();
+            machine.GetComponent<UnitMover>().enabled = false;
             machine.AttackHitHandler.AddListener(() =>
             {
                 enemy.Damage(2);
