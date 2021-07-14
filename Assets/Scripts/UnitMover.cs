@@ -18,6 +18,8 @@ public class UnitMover : MonoBehaviour
 
     private float m_fMoveSpeed = 3.0f;
 
+    public bool can_Move;
+
     [SerializeField] private CinemachineFreeLook freelook;
 
     private Animator m_animator;
@@ -40,8 +42,17 @@ public class UnitMover : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        dir = transform.forward;
-        m_vec2MoveValue = m_inputMove.ReadValue<Vector2>();
+        if(can_Move == true)
+        {
+            dir = transform.forward;
+            m_vec2MoveValue = m_inputMove.ReadValue<Vector2>();
+        }
+        else 
+        {
+            dir = Vector3.zero;
+            m_vec2MoveValue = Vector2.zero;
+        }
+        
     }
     void FixedUpdate()
     {

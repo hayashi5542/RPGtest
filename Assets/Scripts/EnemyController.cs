@@ -12,6 +12,8 @@ public class EnemyController : StateMachineBase<EnemyController>
     private UnityEvent AttackHitHandler = new UnityEvent();
     private UnityEvent AttackEndHandler = new UnityEvent();
     public int HP;
+    public float ground_Hight;
+    private float Attack_delay;
     private void Start()
     {
         System.Type type = typeof(UnitController);
@@ -20,16 +22,17 @@ public class EnemyController : StateMachineBase<EnemyController>
         SetState(new EnemyController.Idol(this));
         EnemyManager.Instance.Add(this);
         HP = 5;
+        ground_Hight = 5;
         
     }
     public void OnAttackHit()
     {
-        Debug.Log("OnAttackHit");
+        //Debug.Log("OnAttackHit");
         AttackHitHandler.Invoke();
     }
     public void OnAttackEnd()
     {
-        Debug.Log("OnAttackEnd");
+        //Debug.Log("OnAttackEnd");
         AttackEndHandler.Invoke();
     }
 
@@ -47,21 +50,22 @@ public class EnemyController : StateMachineBase<EnemyController>
     {
         HP -= damage;
 
-        /*if(HP <= 0)
+        if(HP <= 0)
         {
-            animator.SetTrigger("Die");
+            SetState(new EnemyController.Die(this));
+            //animator.SetTrigger("Die");
             Debug.Log("Die");
-        }*/
+        }
     }
 
-    public bool DieMotion()
+    /*public bool DieMotion()
     {
         if(HP <= 0)
         {
             return true;
         }
         return false;
-    }
+    }*/
 
     private class Idol : StateBase<EnemyController>
     {
@@ -73,6 +77,7 @@ public class EnemyController : StateMachineBase<EnemyController>
             base.OnEnterState();
             machine.animator.SetInteger("battle", 0);
             //machine.animator.SetInteger("battle", 0);
+            machine.Attack_delay = 3;
             Debug.Log("Idol");
         }
 
@@ -110,11 +115,12 @@ public class EnemyController : StateMachineBase<EnemyController>
             float f_distance = (machine.transform.position - machine.target.position).magnitude;
 
 
-            if (machine.DieMotion() == true)
+            /*if (machine.DieMotion() == true)
             {
                 machine.SetState(new EnemyController.Die(machine));
-            }
-            else if (timer > 1)
+
+            }*/
+            if (timer > machine.Attack_delay)
             {
                 machine.SetState(new EnemyController.Attack(machine));
             }
@@ -136,6 +142,7 @@ public class EnemyController : StateMachineBase<EnemyController>
 
         public override void OnEnterState()
         {
+            machine.Attack_delay = 1;
             machine.AttackHitHandler.AddListener(() =>
             {
                 Debug.Log("Attack>Player");
@@ -143,12 +150,14 @@ public class EnemyController : StateMachineBase<EnemyController>
 
             machine.AttackEndHandler.AddListener(() =>
             {
+                Debug.Log("Enemy_AttackEnd");
                 machine.SetState(new EnemyController.Find(machine));
+                
             }); 
             
             //base.OnEnterState();
             machine.animator.SetTrigger("AttackTrigger");
-            Debug.Log("Attack");
+            Debug.Log("Enemy_Attack");
         }
         public override void OnExitState()
         {
@@ -169,20 +178,60 @@ public class EnemyController : StateMachineBase<EnemyController>
         {
             //base.OnEnterState();
             machine.animator.SetTrigger("DieTrigger");
-            machine.animator.SetTrigger("ExitTrigger");
-            Destroy(machine.gameObject, 4.0f);
+            //machine.animator.//SetTrigger("ExitTrigger");
+            //Destroy(machine.gameObject, 4.0f);
             //GameObject effect = Instantiate(break_effect) as GameObject;
-            Debug.Log("Die");
+            Debug.Log("Enemy_Die");
         }
 
-        /*public override void OnUpdateState()
+        public override void OnUpdateState()
+        {
+            //base.OnUpdateState();
+            Die_timer += Time.deltaTime;
+            if(Die_timer > 4.0f)
+            {
+                machine.SetState(new EnemyController.Down(machine));
+                //Destroy(machine.gameObject);
+            }
+        }
+    }
+
+    private class Down : StateBase<EnemyController>
+    {
+        private float speed;
+        private float down_timer;
+        public Down(EnemyController _machine) : base(_machine)
+        {
+        }
+
+        public override void OnEnterState()
+        {
+            //base.OnEnterState();
+           
+        }
+
+        public override void OnUpdateState()
         {
             base.OnUpdateState();
-            Die_timer += Time.deltaTime;
-            //if(Die_timer > 3)
-            //{
-                //Destroy(machine.gameObject);
-            //}
-        }*/
+            speed = -0.1f;
+            down_timer += Time.deltaTime;
+            if(machine.transform.position.y > -5)
+            {
+                machine.transform.Translate(0, speed, 0);
+            }
+
+            if(down_timer > 10.0f)
+            {
+                machine.SetState(new EnemyController.Idol(machine));
+            }
+            
+        }
+        public override void OnExitState()
+        {
+            //base.OnExitState();
+            machine.HP = 5;
+            machine.animator.SetTrigger("IdleTrigger");
+            machine.transform.position = new Vector3(machine.transform.position.x, machine.ground_Hight, machine.transform.position.z);
+        }
     }
 }

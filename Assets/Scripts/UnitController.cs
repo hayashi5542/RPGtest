@@ -9,10 +9,12 @@ public class UnitController : StateMachineBase<UnitController>
     private UnityEvent AttackHitHandler = new UnityEvent();
     private UnityEvent AttackEndHandler = new UnityEvent();
     private Animator animator;
+    private UnitMover unitmover;
     private void Start()
     {
-        SetState(new UnitController.Idle(this));
         animator = GetComponent<Animator>();
+        unitmover = GetComponent<UnitMover>();
+        SetState(new UnitController.Idle(this));
     }
     private bool Find_Enemy(ref EnemyController enemy)
     {
@@ -30,13 +32,13 @@ public class UnitController : StateMachineBase<UnitController>
     public void OnAttackHit()
     {
         AttackHitHandler.Invoke();
-        Debug.Log("player_AttackHit");
+        //Debug.Log("player_AttackHit");
     }
 
     public void OnAttackEnd()
     {
         AttackEndHandler.Invoke();
-        Debug.Log("player_AttackEnd");
+        //Debug.Log("player_AttackEnd");
     }
 
     private class Idle : StateBase<UnitController>
@@ -47,7 +49,8 @@ public class UnitController : StateMachineBase<UnitController>
         public override void OnEnterState()
         {
             base.OnEnterState();
-            Debug.Log("Idle");
+            machine.unitmover.can_Move = true;
+            //Debug.Log("Idle");
         }
         public override void OnUpdateState()
         {
@@ -76,7 +79,8 @@ public class UnitController : StateMachineBase<UnitController>
         public override void OnEnterState()
         {
             base.OnEnterState();
-            Debug.Log("Battle");
+            machine.unitmover.can_Move = false;
+            //Debug.Log("Battle");
             //machine.GetComponent<UnitMover>().enabled = false;
         }
         public override void OnUpdateState()
@@ -91,7 +95,7 @@ public class UnitController : StateMachineBase<UnitController>
             else if (machine.Find_Enemy(ref enemy) == false)
             {
                 machine.SetState(new UnitController.Idle(machine));
-                machine.GetComponent<UnitMover>().enabled = true;
+                //machine.GetComponent<UnitMover>().enabled = true;
                 //Debug.Log("Find.onUpdateState");
             }
         }
@@ -110,7 +114,7 @@ public class UnitController : StateMachineBase<UnitController>
         public override void OnEnterState()
         {
             base.OnEnterState();
-            machine.GetComponent<UnitMover>().enabled = false;
+            //machine.GetComponent<UnitMover>().enabled = false;
             machine.AttackHitHandler.AddListener(() =>
             {
                 enemy.Damage(2);
@@ -123,7 +127,7 @@ public class UnitController : StateMachineBase<UnitController>
             });
 
             machine.animator.SetTrigger("AttackTrigger");
-            Debug.Log("Attack");
+            //Debug.Log("Attack");
         }
         public override void OnExitState()
         {
