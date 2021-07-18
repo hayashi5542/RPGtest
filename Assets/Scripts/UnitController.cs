@@ -10,11 +10,13 @@ public class UnitController : StateMachineBase<UnitController>
     private UnityEvent AttackEndHandler = new UnityEvent();
     private Animator animator;
     private UnitMover unitmover;
+    private bool fightMode;
     private void Start()
     {
         animator = GetComponent<Animator>();
         unitmover = GetComponent<UnitMover>();
         SetState(new UnitController.Idle(this));
+        fightMode = true;
     }
     private bool Find_Enemy(ref EnemyController enemy)
     {
@@ -41,6 +43,18 @@ public class UnitController : StateMachineBase<UnitController>
         //Debug.Log("player_AttackEnd");
     }
 
+    public void FightButtonDown()
+    {
+        fightMode = true;
+    }
+
+    public void EscapeButtonDown()
+    {
+        fightMode = false;
+        SetState(new UnitController.Idle(this));
+        Debug.Log(fightMode);
+    }
+
     private class Idle : StateBase<UnitController>
     {
         public Idle(UnitController _machine) : base(_machine)
@@ -55,11 +69,14 @@ public class UnitController : StateMachineBase<UnitController>
         public override void OnUpdateState()
         {
             base.OnUpdateState();
+            
             EnemyController enemy = null;
-            if (machine.Find_Enemy(ref enemy))
+  
+            if (machine.fightMode == true &&machine.Find_Enemy(ref enemy))
             {
-                machine.SetState(new UnitController.Battle(machine, enemy));
-               
+                Debug.Log(machine.fightMode);
+                //Debug.Log("Go_Buttle");
+                machine.SetState(new UnitController.Battle(machine, enemy));              
             }
         }
     }
@@ -80,7 +97,8 @@ public class UnitController : StateMachineBase<UnitController>
         {
             base.OnEnterState();
             machine.unitmover.can_Move = false;
-            //Debug.Log("Battle");
+            //Debug.Log("player_Battle");
+            //Debug.Log(machine.fightMode);
             //machine.GetComponent<UnitMover>().enabled = false;
         }
         public override void OnUpdateState()
