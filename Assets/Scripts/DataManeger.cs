@@ -14,6 +14,7 @@ public class DataManeger : Singleton<DataManeger>
     public DataUnitParam unitParam;
     public ParamGauge HPgauge;
     public ParamGauge EXPgauge;
+    public WeaponUser weaponUser;
 
     public override void Initialize()
     {
@@ -25,10 +26,17 @@ public class DataManeger : Singleton<DataManeger>
         weaponUnit = new WeaponUnit();
         weaponUnit.Load(taUnitWeapon);
         //unitParam = weaponUnit.list[0];
-        foreach (WeaponUnitParam p in weaponUnit.list)
+        /*foreach (WeaponUnitParam p in weaponUnit.list)
         {
             Debug.Log(p.Weapon_name);
+        }*/
+        weaponUser = new WeaponUser();
+        weaponUser.SetSaveFilename(Define.weaponUserFile);
+        if(weaponUser.Load() == false)
+        {
+            weaponUser.Save();
         }
+
 
         enemyUnit = new EnemyUnit();
         enemyUnit.Load(taUnitEnemy);

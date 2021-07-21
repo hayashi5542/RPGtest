@@ -8,6 +8,7 @@ public class WeaponUnitParam : CsvDataParam
     public int Weapon_ID;
     public string Weapon_name;
     public int Attack;
+    public int prob;
     /*public int Wood_sword;
     public int Stone_sword;
     public int Bronze_sword;

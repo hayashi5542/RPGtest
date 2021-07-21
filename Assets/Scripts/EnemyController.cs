@@ -104,7 +104,7 @@ public class EnemyController : StateMachineBase<EnemyController>
             machine.animator.SetInteger("battle", 1);
             //machine.animator.SetBool("Smash Attack", true);
             //machine.animator.SetInteger("battle", 1);
-
+            unit = machine.target.gameObject.GetComponent<UnitController>();
 
             Debug.Log("Find");
         }
@@ -150,7 +150,7 @@ public class EnemyController : StateMachineBase<EnemyController>
             machine.AttackHitHandler.AddListener(() =>
             {               
                 Debug.Log("Attack>Player");
-                //unit.Damaged(2);
+                unit.Damaged(2);
             });
 
             machine.AttackEndHandler.AddListener(() =>
