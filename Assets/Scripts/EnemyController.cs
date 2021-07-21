@@ -27,7 +27,7 @@ public class EnemyController : StateMachineBase<EnemyController>
     }
     public void OnAttackHit()
     {
-        //Debug.Log("OnAttackHit");
+        Debug.Log("OnAttackHit");
         AttackHitHandler.Invoke();
     }
     public void OnAttackEnd()
@@ -54,7 +54,7 @@ public class EnemyController : StateMachineBase<EnemyController>
         {
             SetState(new EnemyController.Die(this));
             //animator.SetTrigger("Die");
-            Debug.Log("Die");
+            Debug.Log("DieDamage");
         }
     }
 
@@ -94,6 +94,7 @@ public class EnemyController : StateMachineBase<EnemyController>
     private class Find : StateBase<EnemyController>
     {
         private float timer;
+        private UnitController unit;
         public Find(EnemyController _machine) : base(_machine)
         {
         }
@@ -122,7 +123,7 @@ public class EnemyController : StateMachineBase<EnemyController>
             }*/
             if (timer > machine.Attack_delay)
             {
-                machine.SetState(new EnemyController.Attack(machine));
+                machine.SetState(new EnemyController.Attack(machine, unit));
             }
            else if(machine.isFind() == false)
             {
@@ -136,16 +137,20 @@ public class EnemyController : StateMachineBase<EnemyController>
 
     private class Attack : StateBase<EnemyController>
     {
-        public Attack(EnemyController _machine) : base(_machine)
+       private UnitController unit;
+        public Attack(EnemyController _machine,UnitController _unit) : base(_machine)
         {
+            //this.machine = _machine;
+            this.unit = _unit;
         }
 
         public override void OnEnterState()
         {
             machine.Attack_delay = 1;
             machine.AttackHitHandler.AddListener(() =>
-            {
+            {               
                 Debug.Log("Attack>Player");
+                //unit.Damaged(2);
             });
 
             machine.AttackEndHandler.AddListener(() =>

@@ -11,16 +11,18 @@ public class UnitController : StateMachineBase<UnitController>
     private Animator animator;
     private UnitMover unitmover;
     private bool fightMode;
+    public int player_HP;
     private void Start()
     {
         animator = GetComponent<Animator>();
         unitmover = GetComponent<UnitMover>();
         SetState(new UnitController.Idle(this));
         fightMode = true;
+        player_HP = 20;
     }
     private bool Find_Enemy(ref EnemyController enemy)
     {
-        foreach(EnemyController e in EnemyManager.Instance.enemylist)
+        foreach (EnemyController e in EnemyManager.Instance.enemylist)
         {
             if (e.isFind())
             {
@@ -53,6 +55,11 @@ public class UnitController : StateMachineBase<UnitController>
         fightMode = false;
         SetState(new UnitController.Idle(this));
         Debug.Log(fightMode);
+    }
+
+    public void Damaged(int p_damage)
+    {
+        player_HP -= p_damage;
     }
 
     private class Idle : StateBase<UnitController>
