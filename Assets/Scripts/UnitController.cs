@@ -12,9 +12,13 @@ public class UnitController : StateMachineBase<UnitController>
     private UnitMover unitmover;
     private bool fightMode;
     public int player_HP;
+    private ButtonController buttonController;
     private void Start()
     {
         animator = GetComponent<Animator>();
+        buttonController = GetComponent<ButtonController>();
+        //animator.SetBool("ModeFight", true);
+        //animator.SetBool("ModeEscape", false);
         unitmover = GetComponent<UnitMover>();
         SetState(new UnitController.Idle(this));
         fightMode = true;
@@ -48,12 +52,20 @@ public class UnitController : StateMachineBase<UnitController>
     public void FightButtonDown()
     {
         fightMode = true;
+        //transform.Translate(200f, 0, 0);
+        //buttonController.SlideFightButton();
+        //animator.SetBool("ModeFight", true);
+        //animator.SetBool("ModeEscape", false);
+        Debug.Log(fightMode);
     }
 
     public void EscapeButtonDown()
     {
         fightMode = false;
         SetState(new UnitController.Idle(this));
+        //buttonController.SlideEscapeButton();
+        //animator.SetBool("ModeFight", false);
+        //animator.SetBool("ModeEscape", true);
         Debug.Log(fightMode);
     }
 
