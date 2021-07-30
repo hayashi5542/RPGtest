@@ -5,6 +5,7 @@ using anogamelib;
 
 public class DataManeger : Singleton<DataManeger>
 {
+    public KVS gameInfo;
     public TextAsset taUnitData;
     public DataUnit dataUnit;
     public TextAsset taUnitWeapon;
@@ -22,6 +23,18 @@ public class DataManeger : Singleton<DataManeger>
     public override void Initialize()
     {
         base.Initialize();
+        gameInfo = new KVS();
+        gameInfo.SetSaveFilename("gameInfo");
+        if(gameInfo.Load() == false)
+        {
+            gameInfo.SetInt(Define.keyGold, Define.defaultGold);
+            gameInfo.SetInt(Define.keyJem, Define.defaultJem);
+            gameInfo.Save();
+        }
+        gameInfo.AddInt(Define.keyGold, 100);
+        gameInfo.Save();
+        GameHUD.Instance.textGold.text = gameInfo.GetInt(Define.keyGold).ToString();
+        GameHUD.Instance.textJem.text = gameInfo.GetInt(Define.keyJem).ToString();
         dataUnit = new DataUnit();
         dataUnit.Load(taUnitData);
         unitParam = dataUnit.list[0];

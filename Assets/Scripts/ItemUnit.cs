@@ -8,6 +8,7 @@ public class ItemUnitParam : CsvDataParam
     public int Item_ID;
     public string Item_name;
     public int prob;
+    public string Sprite_Name;
 }
 
 public class ItemUnit : CsvData<ItemUnitParam>
