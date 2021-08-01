@@ -22,6 +22,7 @@ public class GachaTop : MonoBehaviour
             DataManeger.Instance.weaponUser.Add(weapon.Weapon_ID);
             panelSwordGacha.weapon_ID = weapon.Weapon_ID;
             panelSwordGacha10.SetWeapon(i, weapon);
+            DataManeger.Instance.WeaponGacha();
         }
 
         DataManeger.Instance.weaponUser.Save();
@@ -36,6 +37,7 @@ public class GachaTop : MonoBehaviour
             DataManeger.Instance.itemUser.Add(item.Item_ID);
             panelItemGacha.item_ID = item.Item_ID;
             panelItemGacha10.SetItem(i, item);
+            DataManeger.Instance.ItemGacha();
         }
 
         DataManeger.Instance.itemUser.Save();

@@ -6,6 +6,7 @@ using anogamelib;
 public class DataManeger : Singleton<DataManeger>
 {
     public KVS gameInfo;
+    public GameHUD gameHUD;
     public TextAsset taUnitData;
     public DataUnit dataUnit;
     public TextAsset taUnitWeapon;
@@ -33,8 +34,10 @@ public class DataManeger : Singleton<DataManeger>
         }
         gameInfo.AddInt(Define.keyGold, 100);
         gameInfo.Save();
-        GameHUD.Instance.textGold.text = gameInfo.GetInt(Define.keyGold).ToString();
-        GameHUD.Instance.textJem.text = gameInfo.GetInt(Define.keyJem).ToString();
+        gameHUD.textGold.text = gameInfo.GetInt(Define.keyGold).ToString();
+        gameHUD.textJem.text = gameInfo.GetInt(Define.keyJem).ToString();
+        //GameHUD.Instance.textGold.text = gameInfo.GetInt(Define.keyGold).ToString();
+        //GameHUD.Instance.textJem.text = gameInfo.GetInt(Define.keyJem).ToString();
         dataUnit = new DataUnit();
         dataUnit.Load(taUnitData);
         unitParam = dataUnit.list[0];
@@ -74,4 +77,28 @@ public class DataManeger : Singleton<DataManeger>
         HPgauge.Init(unitParam.HP_current,unitParam.HP_max);
         EXPgauge.Init(unitParam.EXP_current, unitParam.EXP_max);
     }
+
+    public void  WeaponGacha(/*int count*/)
+    {
+        /*if (jem < (5*count))
+        {
+            Debug.Log("ガチャをひけません");
+        }*/
+        gameInfo.AddInt(Define.keyJem, -5);
+        gameInfo.Save();
+        gameHUD.textJem.text = gameInfo.GetInt(Define.keyJem).ToString();
+        Debug.Log(Define.keyJem);
+    }
+    public void ItemGacha()
+    {
+        gameInfo.AddInt(Define.keyGold, -10);
+        gameInfo.Save();
+        gameHUD.textGold.text = gameInfo.GetInt(Define.keyGold).ToString();
+        //Debug.Log(Define.keyGold);
+    }
+
+    /*public void DecreaseHP(int damage)
+    {
+        unitParam.HP_current -= damage;
+    }*/
 }
