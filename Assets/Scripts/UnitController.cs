@@ -72,6 +72,13 @@ public class UnitController : StateMachineBase<UnitController>
     public void Damaged(int p_damage)
     {
         player_HP -= p_damage;
+
+        if (player_HP <= 0)
+        {
+            SetState(new UnitController.Die(this));
+            //animator.SetTrigger("Die");
+            //Debug.Log("DieDamage");
+        }
     }
 
     private class Idle : StateBase<UnitController>
@@ -174,5 +181,31 @@ public class UnitController : StateMachineBase<UnitController>
         }
 
 
+    }
+
+    private class Die : StateBase<UnitController>
+    {
+        public Die(UnitController _machine) : base(_machine)
+        {
+        }
+
+        public override void OnEnterState()
+        {
+            base.OnEnterState();
+            machine.animator.SetTrigger("DieTrigger");
+        }
+
+        public override void OnUpdateState()
+        {
+            base.OnUpdateState();
+
+        }
+
+        public override void OnExitState()
+        {
+            base.OnExitState();
+            machine.animator.SetTrigger("RestartTrigger");
+            machine.player_HP += 10;
+        }
     }
 }

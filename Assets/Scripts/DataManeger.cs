@@ -87,7 +87,7 @@ public class DataManeger : Singleton<DataManeger>
         gameInfo.AddInt(Define.keyJem, -5);
         gameInfo.Save();
         gameHUD.textJem.text = gameInfo.GetInt(Define.keyJem).ToString();
-        Debug.Log(Define.keyJem);
+        //Debug.Log(Define.keyJem);
     }
     public void ItemGacha()
     {
