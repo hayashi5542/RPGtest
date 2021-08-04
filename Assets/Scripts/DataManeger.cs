@@ -30,6 +30,7 @@ public class DataManeger : Singleton<DataManeger>
         {
             gameInfo.SetInt(Define.keyGold, Define.defaultGold);
             gameInfo.SetInt(Define.keyJem, Define.defaultJem);
+            gameInfo.SetInt(Define.keyEquipWeaponID, Define.defaultWeaponID);
             gameInfo.Save();
         }
         gameInfo.AddInt(Define.keyGold, 100);
@@ -55,6 +56,7 @@ public class DataManeger : Singleton<DataManeger>
         weaponUser.SetSaveFilename(Define.weaponUserFile);
         if(weaponUser.Load() == false)
         {
+            weaponUser.Add(Define.defaultWeaponID);
             weaponUser.Save();
         }
 
