@@ -31,12 +31,15 @@ public class DataManeger : Singleton<DataManeger>
             gameInfo.SetInt(Define.keyGold, Define.defaultGold);
             gameInfo.SetInt(Define.keyJem, Define.defaultJem);
             gameInfo.SetInt(Define.keyEquipWeaponID, Define.defaultWeaponID);
+            gameInfo.SetInt(Define.keyCraftItemID, Define.defaultCraftItemID);
+            gameInfo.SetInt(Define.keyLevel, Define.defaultLevel);
             gameInfo.Save();
         }
         gameInfo.AddInt(Define.keyGold, 100);
         gameInfo.Save();
         gameHUD.textGold.text = gameInfo.GetInt(Define.keyGold).ToString();
         gameHUD.textJem.text = gameInfo.GetInt(Define.keyJem).ToString();
+        gameHUD.textLevel.text = gameInfo.GetInt(Define.keyLevel).ToString();
         //GameHUD.Instance.textGold.text = gameInfo.GetInt(Define.keyGold).ToString();
         //GameHUD.Instance.textJem.text = gameInfo.GetInt(Define.keyJem).ToString();
         dataUnit = new DataUnit();

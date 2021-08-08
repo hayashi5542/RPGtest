@@ -10,6 +10,7 @@ public class WeaponUnitParam : CsvDataParam
     public int Attack;
     public int prob;
     public string Sprite_Name;
+    public string Sprite_CraftName;
 }
 
 public class WeaponUnit : CsvData<WeaponUnitParam>

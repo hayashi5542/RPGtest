@@ -13,6 +13,7 @@ public class UnitController : StateMachineBase<UnitController>
     private bool fightMode;
     public int player_HP;
     private ButtonController buttonController;
+    public int playerLevel;
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -23,6 +24,8 @@ public class UnitController : StateMachineBase<UnitController>
         SetState(new UnitController.Idle(this));
         fightMode = true;
         player_HP = 20;
+        playerLevel = DataManeger.Instance.gameInfo.GetInt(Define.keyLevel);
+        //playerLevel = DataManeger.Instance.gameHUD.textLevel;
     }
     private bool Find_Enemy(ref EnemyController enemy)
     {

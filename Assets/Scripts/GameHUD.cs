@@ -9,4 +9,5 @@ public class GameHUD : Singleton<GameHUD>
 {
     public TextMeshProUGUI textGold;
     public TextMeshProUGUI textJem;
+    public TextMeshProUGUI textLevel;
 }

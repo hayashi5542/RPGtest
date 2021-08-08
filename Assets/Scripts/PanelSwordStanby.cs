@@ -14,10 +14,13 @@ public class PanelSwordStanby : MonoBehaviour
     public int current_weaponID;
     public Image weapon_icon_Left;
     public Image weapon_icon_Right;
+    public Image weapon_craftItem;
+    public int craftItemID;
 
     private void OnEnable()
     {
         current_weaponID = DataManeger.Instance.gameInfo.GetInt(Define.keyEquipWeaponID);
+        craftItemID = DataManeger.Instance.gameInfo.GetInt(Define.keyCraftItemID);
         ShowWeapon(current_weaponID);
         /*WeaponUnitParam weapon = DataManeger.Instance.weaponUnit.list.Find(p => p.Weapon_ID == current_weaponID);
         weapon_name.text = weapon.Weapon_name;
@@ -36,6 +39,7 @@ public class PanelSwordStanby : MonoBehaviour
         WeaponUnitParam weapon = DataManeger.Instance.weaponUnit.list.Find(p => p.Weapon_ID == _weaponID);
         weapon_name.text = weapon.Weapon_name;
         weapon_icon.sprite = SpriteManager.Instance.Get(weapon.Sprite_Name);
+        weapon_craftItem.sprite = SpriteManager.Instance.Get(weapon.Sprite_CraftName);
 
         int left_wepon_ID = _weaponID - 1;
         WeaponUnitParam left_weapon = DataManeger.Instance.weaponUnit.list.Find(p => p.Weapon_ID == left_wepon_ID);
@@ -80,6 +84,11 @@ public class PanelSwordStanby : MonoBehaviour
             current_weaponID += 1;
             ShowWeapon(current_weaponID);
         }
+
+    }
+
+    public void SetButton()
+    {
 
     }
 
