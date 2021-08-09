@@ -8,6 +8,7 @@ using anogamelib;
 public class PanelSwordStanby : MonoBehaviour
 {
     public TextMeshProUGUI weapon_name;
+    public TextMeshProUGUI weapon_AttackNum;
     public Image weapon_icon;
     public Button left;
     public Button right;
@@ -16,6 +17,7 @@ public class PanelSwordStanby : MonoBehaviour
     public Image weapon_icon_Right;
     public Image weapon_craftItem;
     public int craftItemID;
+    public int weaponAttack;
 
     private void OnEnable()
     {
@@ -40,6 +42,8 @@ public class PanelSwordStanby : MonoBehaviour
         weapon_name.text = weapon.Weapon_name;
         weapon_icon.sprite = SpriteManager.Instance.Get(weapon.Sprite_Name);
         weapon_craftItem.sprite = SpriteManager.Instance.Get(weapon.Sprite_CraftName);
+        weaponAttack = weapon.Attack;
+        weapon_AttackNum.text = weaponAttack.ToString();
 
         int left_wepon_ID = _weaponID - 1;
         WeaponUnitParam left_weapon = DataManeger.Instance.weaponUnit.list.Find(p => p.Weapon_ID == left_wepon_ID);
@@ -89,8 +93,16 @@ public class PanelSwordStanby : MonoBehaviour
 
     public void SetButton()
     {
-
+        
     }
 
+    public void CancelButton()
+    {
+      
+    }
 
+    public int WeaponAttack()
+    {
+        return weaponAttack;
+    }
 }

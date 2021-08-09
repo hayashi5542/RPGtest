@@ -14,6 +14,10 @@ public class UnitController : StateMachineBase<UnitController>
     public int player_HP;
     private ButtonController buttonController;
     public int playerLevel;
+    public int playerAttack;
+    private int weaponAttack; 
+    private PanelSwordStanby panelSwordStanby;
+    private int current_weaponID;
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -25,6 +29,10 @@ public class UnitController : StateMachineBase<UnitController>
         fightMode = true;
         player_HP = 20;
         playerLevel = DataManeger.Instance.gameInfo.GetInt(Define.keyLevel);
+        current_weaponID = DataManeger.Instance.gameInfo.GetInt(Define.keyEquipWeaponID);
+        WeaponUnitParam weapon = DataManeger.Instance.weaponUnit.list.Find(p => p.Weapon_ID == current_weaponID);
+        weaponAttack = weapon.Attack;
+        playerAttack = (playerLevel * 2)+ weaponAttack;
         //playerLevel = DataManeger.Instance.gameHUD.textLevel;
     }
     private bool Find_Enemy(ref EnemyController enemy)
@@ -164,7 +172,7 @@ public class UnitController : StateMachineBase<UnitController>
             //machine.GetComponent<UnitMover>().enabled = false;
             machine.AttackHitHandler.AddListener(() =>
             {
-                enemy.Damage(2);
+                enemy.Damage(machine.playerAttack);
             }
             );
 
