@@ -9,9 +9,13 @@ public class PanelSwordStanby : MonoBehaviour
 {
     public TextMeshProUGUI weapon_name;
     public TextMeshProUGUI weapon_AttackNum;
+    private UnitController unitController;
+    private DataManeger dataManeger;
     public Image weapon_icon;
     public Button left;
     public Button right;
+    public Button setWeapon;
+    public Button PowerUp;
     public int current_weaponID;
     public Image weapon_icon_Left;
     public Image weapon_icon_Right;
@@ -93,7 +97,9 @@ public class PanelSwordStanby : MonoBehaviour
 
     public void SetButton()
     {
-        
+        //Debug.Log(current_weaponID);
+        //current_weaponID = DataManeger.Instance.gameInfo.GetInt(Define.keyEquipWeaponID);
+        unitController.SetAttack(current_weaponID);
     }
 
     public void CancelButton()
@@ -101,8 +107,19 @@ public class PanelSwordStanby : MonoBehaviour
       
     }
 
-    public int WeaponAttack()
+    public void PowerUpButton()
     {
-        return weaponAttack;
+            unitController.weaponAttack += 2;
+            dataManeger.PowerUP();
+  
+
+    }
+
+    public void WeaponAttack()
+    {
+        /*current_weaponID = DataManeger.Instance.gameInfo.GetInt(Define.keyEquipWeaponID);
+        WeaponUnitParam weapon = DataManeger.Instance.weaponUnit.list.Find(p => p.Weapon_ID == current_weaponID);
+        weaponAttack = weapon.Attack;
+        return weaponAttack;*/
     }
 }

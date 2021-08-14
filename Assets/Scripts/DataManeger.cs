@@ -102,6 +102,13 @@ public class DataManeger : Singleton<DataManeger>
         //Debug.Log(Define.keyGold);
     }
 
+    public void PowerUP()
+    {
+        gameInfo.AddInt(Define.keyGold, -100);
+        gameInfo.Save();
+        gameHUD.textGold.text = gameInfo.GetInt(Define.keyGold).ToString();
+    }
+
     /*public void DecreaseHP(int damage)
     {
         unitParam.HP_current -= damage;

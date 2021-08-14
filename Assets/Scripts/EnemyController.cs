@@ -8,6 +8,7 @@ public class EnemyController : StateMachineBase<EnemyController>
 {
     public Transform target;
     private Animator animator;
+    private UnitController unitController;
     //private GameObject player;
     private UnityEvent AttackHitHandler = new UnityEvent();
     private UnityEvent AttackEndHandler = new UnityEvent();
@@ -18,10 +19,11 @@ public class EnemyController : StateMachineBase<EnemyController>
     {
         System.Type type = typeof(UnitController);
         target = (GameObject.FindObjectOfType(type) as UnitController).transform;
+        unitController = GetComponent<UnitController>();
         animator = GetComponent<Animator>();
         SetState(new EnemyController.Idol(this));
         EnemyManager.Instance.Add(this);
-        HP = 5;
+        HP = 20;
         ground_Hight = 5;
         
     }
@@ -53,6 +55,7 @@ public class EnemyController : StateMachineBase<EnemyController>
         if(HP <= 0)
         {
             SetState(new EnemyController.Die(this));
+            //unitController.GetEXP(10);
             //animator.SetTrigger("Die");
             Debug.Log("DieDamage");
         }
@@ -141,7 +144,7 @@ public class EnemyController : StateMachineBase<EnemyController>
         public Attack(EnemyController _machine,UnitController _unit) : base(_machine)
         {
             //this.machine = _machine;
-            this.unit = _unit;
+            //this.unit = _unit;
         }
 
         public override void OnEnterState()
@@ -175,14 +178,18 @@ public class EnemyController : StateMachineBase<EnemyController>
     private class Die : StateBase<EnemyController>
     {
         private float Die_timer;
+        private UnitController unitController;
         //private GameObject break_effect;
         public Die(EnemyController _machine) : base(_machine)
         {
+            //this.unit = _unit;
         }
         public override void OnEnterState()
         {
             //base.OnEnterState();
             machine.animator.SetTrigger("DieTrigger");
+            machine.unitController.GetEXP(10);
+            //unit.GetEXP(10);
             //machine.animator.//SetTrigger("ExitTrigger");
             //Destroy(machine.gameObject, 4.0f);
             //GameObject effect = Instantiate(break_effect) as GameObject;

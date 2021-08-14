@@ -12,10 +12,11 @@ public class UnitController : StateMachineBase<UnitController>
     private UnitMover unitmover;
     private bool fightMode;
     public int player_HP;
+    public int player_EXP;
     private ButtonController buttonController;
     public int playerLevel;
     public int playerAttack;
-    private int weaponAttack; 
+    public int weaponAttack; 
     private PanelSwordStanby panelSwordStanby;
     private int current_weaponID;
     private void Start()
@@ -28,11 +29,13 @@ public class UnitController : StateMachineBase<UnitController>
         SetState(new UnitController.Idle(this));
         fightMode = true;
         player_HP = 20;
+        player_EXP = 0;
         playerLevel = DataManeger.Instance.gameInfo.GetInt(Define.keyLevel);
+
         current_weaponID = DataManeger.Instance.gameInfo.GetInt(Define.keyEquipWeaponID);
-        WeaponUnitParam weapon = DataManeger.Instance.weaponUnit.list.Find(p => p.Weapon_ID == current_weaponID);
-        weaponAttack = weapon.Attack;
-        playerAttack = (playerLevel * 2)+ weaponAttack;
+        SetAttack(current_weaponID);
+        
+
         //playerLevel = DataManeger.Instance.gameHUD.textLevel;
     }
     private bool Find_Enemy(ref EnemyController enemy)
@@ -80,6 +83,14 @@ public class UnitController : StateMachineBase<UnitController>
         Debug.Log(fightMode);
     }
 
+    public void SetAttack(int _weaponID)
+    {
+        //Debug.Log("SetAttack");
+        WeaponUnitParam weapon = DataManeger.Instance.weaponUnit.list.Find(p => p.Weapon_ID == _weaponID);
+        weaponAttack = weapon.Attack;
+        playerAttack = (playerLevel * 2) + weaponAttack;
+    }
+
     public void Damaged(int p_damage)
     {
         player_HP -= p_damage;
@@ -90,6 +101,11 @@ public class UnitController : StateMachineBase<UnitController>
             //animator.SetTrigger("Die");
             //Debug.Log("DieDamage");
         }
+    }
+
+    public void GetEXP(int _EXP)
+    {
+        player_EXP += _EXP;
     }
 
     private class Idle : StateBase<UnitController>
