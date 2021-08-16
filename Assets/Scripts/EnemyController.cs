@@ -188,7 +188,7 @@ public class EnemyController : StateMachineBase<EnemyController>
         {
             //base.OnEnterState();
             machine.animator.SetTrigger("DieTrigger");
-            machine.unitController.GetEXP(10);
+            //machine.unitController.GetEXP(10);
             //unit.GetEXP(10);
             //machine.animator.//SetTrigger("ExitTrigger");
             //Destroy(machine.gameObject, 4.0f);
