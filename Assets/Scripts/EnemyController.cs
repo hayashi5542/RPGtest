@@ -48,17 +48,20 @@ public class EnemyController : StateMachineBase<EnemyController>
         return f_distance < 3;
     }
 
-    public void Damage(int damage)
+    public bool Damage(int damage)
     {
+        bool ret = false;
         HP -= damage;
 
         if(HP <= 0)
         {
+            ret = true;
             SetState(new EnemyController.Die(this));
             //unitController.GetEXP(10);
             //animator.SetTrigger("Die");
             Debug.Log("DieDamage");
         }
+        return ret;
     }
 
     /*public bool DieMotion()

@@ -188,7 +188,10 @@ public class UnitController : StateMachineBase<UnitController>
             //machine.GetComponent<UnitMover>().enabled = false;
             machine.AttackHitHandler.AddListener(() =>
             {
-                enemy.Damage(machine.playerAttack);
+                if (enemy.Damage(machine.playerAttack))
+                {
+                    machine.GetEXP(10);
+                }
             }
             );
 
