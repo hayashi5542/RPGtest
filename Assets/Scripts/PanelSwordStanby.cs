@@ -43,9 +43,10 @@ public class PanelSwordStanby : MonoBehaviour
     private void ShowWeapon(int _weaponID)
     {
         WeaponUnitParam weapon = DataManeger.Instance.weaponUnit.list.Find(p => p.Weapon_ID == _weaponID);
+        ItemUnitParam item = DataManeger.Instance.itemUnit.list.Find(p => p.Item_ID == weapon.CraftItem_ID);
         weapon_name.text = weapon.Weapon_name;
         weapon_icon.sprite = SpriteManager.Instance.Get(weapon.Sprite_Name);
-        weapon_craftItem.sprite = SpriteManager.Instance.Get(weapon.Sprite_CraftName);
+        weapon_craftItem.sprite = SpriteManager.Instance.Get(item.Sprite_Name);
         weaponAttack = weapon.Attack;
         weapon_AttackNum.text = weaponAttack.ToString();
 

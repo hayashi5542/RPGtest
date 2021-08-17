@@ -13,12 +13,14 @@ public class UnitController : StateMachineBase<UnitController>
     private bool fightMode;
     public int player_HP;
     public int player_EXP;
+    public int need_EXP;
     private ButtonController buttonController;
     public int playerLevel;
     public int playerAttack;
     public int weaponAttack; 
     private PanelSwordStanby panelSwordStanby;
     private int current_weaponID;
+    
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -30,6 +32,7 @@ public class UnitController : StateMachineBase<UnitController>
         fightMode = true;
         player_HP = 20;
         player_EXP = 0;
+        need_EXP = 50;
         playerLevel = DataManeger.Instance.gameInfo.GetInt(Define.keyLevel);
 
         current_weaponID = DataManeger.Instance.gameInfo.GetInt(Define.keyEquipWeaponID);
@@ -106,6 +109,14 @@ public class UnitController : StateMachineBase<UnitController>
     public void GetEXP(int _EXP)
     {
         player_EXP += _EXP;
+        if(player_EXP >= need_EXP)
+        {
+            playerLevel += 1;
+            player_EXP -= need_EXP;
+
+            need_EXP += 10;
+        }
+        
     }
 
     private class Idle : StateBase<UnitController>
