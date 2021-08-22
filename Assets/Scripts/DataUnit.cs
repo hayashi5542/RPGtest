@@ -12,6 +12,13 @@ public class DataUnitParam : CsvDataParam
     public int Attack;
     public int Speed;
     public int Defence;
+    public int Lucky;
+    public int level;
+    public int status;
+    public int status_ATK;
+    public int status_VIT;
+    public int status_AGI;
+    public int status_LUK;
 }
 
 public class DataUnit : CsvData<DataUnitParam>

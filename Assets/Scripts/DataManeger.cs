@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using anogamelib;
+using TMPro;
+using UnityEngine.UI;
 
 public class DataManeger : Singleton<DataManeger>
 {
@@ -20,6 +22,15 @@ public class DataManeger : Singleton<DataManeger>
     public ParamGauge EXPgauge;
     public WeaponUser weaponUser;
     public ItemUser itemUser;
+    public TextMeshProUGUI textLevel;
+   /* public Button getPointATK;
+    public Button getPointVIT;
+    public Button getPointAGI;
+    public Button getPointLUK;
+    public TextMeshProUGUI pointATK;
+    public TextMeshProUGUI pointVIT;
+    public TextMeshProUGUI pointAGI;
+    public TextMeshProUGUI pointLUK;*/
 
     public override void Initialize()
     {
@@ -81,6 +92,13 @@ public class DataManeger : Singleton<DataManeger>
         }*/
         HPgauge.Init(unitParam.HP_current,unitParam.HP_max);
         EXPgauge.Init(unitParam.EXP_current, unitParam.EXP_max);
+
+        textLevel.text = DataManeger.Instance.unitParam.level.ToString();
+    }
+
+    public void LevelUp()
+    {
+        //textLevel.text = DataManeger.Instance.unitParam.level.ToString();
     }
 
     public void  WeaponGacha(/*int count*/)
@@ -108,6 +126,24 @@ public class DataManeger : Singleton<DataManeger>
         gameInfo.Save();
         gameHUD.textGold.text = gameInfo.GetInt(Define.keyGold).ToString();
     }
+
+    public void SetHP(int _currentHP)
+    {
+        HPgauge.Set(_currentHP);
+    }
+
+    public void SetEXP(int _currentEXP, int _EXP_Max)
+    {
+        EXPgauge.Init(_currentEXP, _EXP_Max);
+    }
+
+    public void OnButtonHeal()
+    {
+        unitParam.HP_current += (int)((float)unitParam.HP_max * 0.3f);
+        SetHP(unitParam.HP_current);
+    }
+
+
 
     /*public void DecreaseHP(int damage)
     {

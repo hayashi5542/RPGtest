@@ -10,10 +10,11 @@ public class UnitController : StateMachineBase<UnitController>
     private UnityEvent AttackEndHandler = new UnityEvent();
     private Animator animator;
     private UnitMover unitmover;
+    private DataManeger dataManeger;
     private bool fightMode;
     public int player_HP;
     public int player_EXP;
-    public int need_EXP;
+    public int EXP_max;
     private ButtonController buttonController;
     public int playerLevel;
     public int playerAttack;
@@ -28,11 +29,13 @@ public class UnitController : StateMachineBase<UnitController>
         //animator.SetBool("ModeFight", true);
         //animator.SetBool("ModeEscape", false);
         unitmover = GetComponent<UnitMover>();
+        dataManeger = GetComponent<DataManeger>();
         SetState(new UnitController.Idle(this));
         fightMode = true;
-        player_HP = 20;
-        player_EXP = 0;
-        need_EXP = 50;
+        player_HP = DataManeger.Instance.unitParam.HP_max;
+        player_EXP = DataManeger.Instance.unitParam.EXP_current;
+        EXP_max = DataManeger.Instance.unitParam.EXP_max;
+        //playerLevel = DataManeger.Instance.unitParam.level;
         playerLevel = DataManeger.Instance.gameInfo.GetInt(Define.keyLevel);
 
         current_weaponID = DataManeger.Instance.gameInfo.GetInt(Define.keyEquipWeaponID);
@@ -97,8 +100,10 @@ public class UnitController : StateMachineBase<UnitController>
     public void Damaged(int p_damage)
     {
         player_HP -= p_damage;
+        DataManeger.Instance.unitParam.HP_current -= p_damage;
+        DataManeger.Instance.SetHP(DataManeger.Instance.unitParam.HP_current);
 
-        if (player_HP <= 0)
+        if (DataManeger.Instance.unitParam.HP_current <= 0)
         {
             SetState(new UnitController.Die(this));
             //animator.SetTrigger("Die");
@@ -109,13 +114,26 @@ public class UnitController : StateMachineBase<UnitController>
     public void GetEXP(int _EXP)
     {
         player_EXP += _EXP;
-        if(player_EXP >= need_EXP)
+        DataManeger.Instance.unitParam.EXP_current += _EXP;
+        
+        if (player_EXP >= EXP_max) 
         {
+            //playerLevel += 1;
             playerLevel += 1;
-            player_EXP -= need_EXP;
+            //ataManeger.LevelUp();
+            Debug.Log(playerLevel);
+            player_EXP -= EXP_max;
+            DataManeger.Instance.unitParam.EXP_current -= DataManeger.Instance.unitParam.EXP_max;
+            //player_EXP -= need_EXP;
 
-            need_EXP += 10;
+            //need_EXP += 10;
+            EXP_max += 10;
+            DataManeger.Instance.unitParam.EXP_max += 10;
+
+            DataManeger.Instance.unitParam.status += 3;
         }
+        DataManeger.Instance.SetEXP(DataManeger.Instance.unitParam.EXP_current, DataManeger.Instance.unitParam.EXP_max);
+       
         
     }
 
@@ -245,8 +263,8 @@ public class UnitController : StateMachineBase<UnitController>
         public override void OnExitState()
         {
             base.OnExitState();
-            machine.animator.SetTrigger("RestartTrigger");
-            machine.player_HP += 10;
+            //machine.animator.SetTrigger("RestartTrigger");
+            //machine.player_HP += 10;
         }
     }
 }

@@ -23,7 +23,7 @@ public class EnemyController : StateMachineBase<EnemyController>
         animator = GetComponent<Animator>();
         SetState(new EnemyController.Idol(this));
         EnemyManager.Instance.Add(this);
-        HP = 20;
+        HP = 50;
         ground_Hight = 5;
         
     }
@@ -89,7 +89,7 @@ public class EnemyController : StateMachineBase<EnemyController>
 
         public override void OnUpdateState()
         {
-            if (machine.isFind())
+            if (machine.isFind() && DataManeger.Instance.unitParam.HP_current > 0)
             {
                 machine.SetState(new EnemyController.Find(machine));
             }
@@ -127,7 +127,7 @@ public class EnemyController : StateMachineBase<EnemyController>
                 machine.SetState(new EnemyController.Die(machine));
 
             }*/
-            if (timer > machine.Attack_delay)
+            if (timer > machine.Attack_delay && DataManeger.Instance.unitParam.HP_current > 0)
             {
                 machine.SetState(new EnemyController.Attack(machine, unit));
             }
@@ -147,7 +147,7 @@ public class EnemyController : StateMachineBase<EnemyController>
         public Attack(EnemyController _machine,UnitController _unit) : base(_machine)
         {
             //this.machine = _machine;
-            //this.unit = _unit;
+            this.unit = _unit;
         }
 
         public override void OnEnterState()
@@ -156,7 +156,11 @@ public class EnemyController : StateMachineBase<EnemyController>
             machine.AttackHitHandler.AddListener(() =>
             {               
                 Debug.Log("Attack>Player");
-                unit.Damaged(2);
+                unit.Damaged(5);
+                if(DataManeger.Instance.unitParam.HP_current > 0)
+                {
+                    machine.SetState(new EnemyController.Idol(machine));
+                }
             });
 
             machine.AttackEndHandler.AddListener(() =>
