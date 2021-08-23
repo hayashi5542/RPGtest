@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using anogamelib;
 using UnityEngine.Events;
+using TMPro;
 
 public class UnitController : StateMachineBase<UnitController>
 {
@@ -21,6 +23,10 @@ public class UnitController : StateMachineBase<UnitController>
     public int weaponAttack; 
     private PanelSwordStanby panelSwordStanby;
     private int current_weaponID;
+    public TextMeshProUGUI textHP;
+    public TextMeshProUGUI textEXP;
+    public TextMeshProUGUI textLevel;
+    public Image pointSign;
     
     private void Start()
     {
@@ -33,13 +39,17 @@ public class UnitController : StateMachineBase<UnitController>
         SetState(new UnitController.Idle(this));
         fightMode = true;
         player_HP = DataManeger.Instance.unitParam.HP_max;
+        textHP.text = DataManeger.Instance.unitParam.HP_current + "/" + DataManeger.Instance.unitParam.HP_max;
         player_EXP = DataManeger.Instance.unitParam.EXP_current;
         EXP_max = DataManeger.Instance.unitParam.EXP_max;
+        textEXP.text = DataManeger.Instance.unitParam.EXP_current + "/" + DataManeger.Instance.unitParam.EXP_max;
         //playerLevel = DataManeger.Instance.unitParam.level;
         playerLevel = DataManeger.Instance.gameInfo.GetInt(Define.keyLevel);
+        textLevel.text = DataManeger.Instance.unitParam.level.ToString();
 
         current_weaponID = DataManeger.Instance.gameInfo.GetInt(Define.keyEquipWeaponID);
         SetAttack(current_weaponID);
+        pointSign.enabled = false;
         
 
         //playerLevel = DataManeger.Instance.gameHUD.textLevel;
@@ -102,6 +112,7 @@ public class UnitController : StateMachineBase<UnitController>
         player_HP -= p_damage;
         DataManeger.Instance.unitParam.HP_current -= p_damage;
         DataManeger.Instance.SetHP(DataManeger.Instance.unitParam.HP_current);
+        textHP.text = DataManeger.Instance.unitParam.HP_current + "/" + DataManeger.Instance.unitParam.HP_max;
 
         if (DataManeger.Instance.unitParam.HP_current <= 0)
         {
@@ -109,6 +120,11 @@ public class UnitController : StateMachineBase<UnitController>
             //animator.SetTrigger("Die");
             //Debug.Log("DieDamage");
         }
+    }
+
+    public void Heal(int _HP)
+    {
+        textHP.text = DataManeger.Instance.unitParam.HP_current + "/" + DataManeger.Instance.unitParam.HP_max;
     }
 
     public void GetEXP(int _EXP)
@@ -120,6 +136,7 @@ public class UnitController : StateMachineBase<UnitController>
         {
             //playerLevel += 1;
             playerLevel += 1;
+            textLevel.text = playerLevel.ToString();
             //ataManeger.LevelUp();
             Debug.Log(playerLevel);
             player_EXP -= EXP_max;
@@ -131,10 +148,11 @@ public class UnitController : StateMachineBase<UnitController>
             DataManeger.Instance.unitParam.EXP_max += 10;
 
             DataManeger.Instance.unitParam.status += 3;
+            pointSign.enabled = true;
         }
         DataManeger.Instance.SetEXP(DataManeger.Instance.unitParam.EXP_current, DataManeger.Instance.unitParam.EXP_max);
-       
-        
+        textEXP.text = DataManeger.Instance.unitParam.EXP_current + "/" + DataManeger.Instance.unitParam.EXP_max;
+
     }
 
     private class Idle : StateBase<UnitController>

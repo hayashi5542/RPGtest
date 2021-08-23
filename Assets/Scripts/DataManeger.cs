@@ -23,6 +23,8 @@ public class DataManeger : Singleton<DataManeger>
     public WeaponUser weaponUser;
     public ItemUser itemUser;
     public TextMeshProUGUI textLevel;
+    public UnitController unitController;
+    public Image pointer;
    /* public Button getPointATK;
     public Button getPointVIT;
     public Button getPointAGI;
@@ -94,6 +96,8 @@ public class DataManeger : Singleton<DataManeger>
         EXPgauge.Init(unitParam.EXP_current, unitParam.EXP_max);
 
         textLevel.text = DataManeger.Instance.unitParam.level.ToString();
+
+        //pointer.enabled = false;
     }
 
     public void LevelUp()
@@ -141,7 +145,13 @@ public class DataManeger : Singleton<DataManeger>
     {
         unitParam.HP_current += (int)((float)unitParam.HP_max * 0.3f);
         SetHP(unitParam.HP_current);
+        unitController.textHP.text = DataManeger.Instance.unitParam.HP_current + "/" + DataManeger.Instance.unitParam.HP_max; ;
     }
+
+    /*public bool PointSign()
+    {
+
+    }*/
 
 
 
