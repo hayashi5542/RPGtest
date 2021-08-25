@@ -23,6 +23,12 @@ public class PanelSwordStanby : MonoBehaviour
     public int craftItemID;
     public int weaponAttack;
 
+    private void Start()
+    {
+        System.Type type = typeof(UnitController);
+        unitController = (GameObject.FindObjectOfType(type) as UnitController);
+    }
+
     private void OnEnable()
     {
         current_weaponID = DataManeger.Instance.gameInfo.GetInt(Define.keyEquipWeaponID);
@@ -116,6 +122,8 @@ public class PanelSwordStanby : MonoBehaviour
         //Debug.Log(current_weaponID);
         //current_weaponID = DataManeger.Instance.gameInfo.GetInt(Define.keyEquipWeaponID);
         unitController.SetAttack(current_weaponID);
+        DataManeger.Instance.gameInfo.SetInt(Define.keyEquipWeaponID, current_weaponID);
+        DataManeger.Instance.gameInfo.Save();
     }
 
     public void CancelButton()
@@ -126,9 +134,7 @@ public class PanelSwordStanby : MonoBehaviour
     public void PowerUpButton()
     {
             unitController.weaponAttack += 2;
-            dataManeger.PowerUP();
-  
-
+            dataManeger.PowerUP(current_weaponID);
     }
 
     public void WeaponAttack()

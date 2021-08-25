@@ -19,6 +19,10 @@ public class DataUnitParam : CsvDataParam
     public int status_VIT;
     public int status_AGI;
     public int status_LUK;
+    public int GetTotal_ATK()
+    {
+        return Attack + status_ATK;
+    }
 }
 
 public class DataUnit : CsvData<DataUnitParam>

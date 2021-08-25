@@ -124,10 +124,13 @@ public class DataManeger : Singleton<DataManeger>
         //Debug.Log(Define.keyGold);
     }
 
-    public void PowerUP()
+    public void PowerUP(int _weaponID)
     {
         gameInfo.AddInt(Define.keyGold, -100);
+        WeaponUserParam weaponUserParam = weaponUser.list.Find(p => p.Weapon_ID == _weaponID);
+        weaponUserParam.craft_count += 1;
         gameInfo.Save();
+        weaponUser.Save();
         gameHUD.textGold.text = gameInfo.GetInt(Define.keyGold).ToString();
     }
 
