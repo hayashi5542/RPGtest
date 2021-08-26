@@ -6,6 +6,7 @@ using TMPro;
 public class PanelItem : MonoBehaviour
 {
     public List<TextMeshProUGUI> NumTextList;
+    public TextMeshProUGUI potionTextNum;
 
     private void OnEnable()
     {
@@ -18,6 +19,7 @@ public class PanelItem : MonoBehaviour
         {
             int itemID = i + 2;
             int ItemNum = 0;
+            
             ItemUserParam item = DataManeger.Instance.itemUser.list.Find(p => p.Item_ID == itemID);
             if(item != null)
             {
@@ -25,6 +27,14 @@ public class PanelItem : MonoBehaviour
             }
             NumTextList[i].text = ItemNum.ToString();
         }
+
+        int potionNum = 0;
+        ItemUserParam potion = DataManeger.Instance.itemUser.list.Find(p => p.Item_ID == 1);
+        if(potion != null)
+        {
+             potionNum = potion.num;
+        }
+        potionTextNum.text = potionNum.ToString();
     }
     // Start is called before the first frame update
     void Start()

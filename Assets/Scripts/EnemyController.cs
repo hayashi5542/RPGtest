@@ -23,7 +23,7 @@ public class EnemyController : StateMachineBase<EnemyController>
         animator = GetComponent<Animator>();
         SetState(new EnemyController.Idol(this));
         EnemyManager.Instance.Add(this);
-        HP = 50;
+        HP = 500;
         ground_Hight = 5;
         
     }

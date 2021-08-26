@@ -146,8 +146,16 @@ public class DataManeger : Singleton<DataManeger>
 
     public void OnButtonHeal()
     {
-        unitParam.HP_current += (int)((float)unitParam.HP_max * 0.3f);
-        SetHP(unitParam.HP_current);
+        if(DataManeger.Instance.unitParam.HP_current < DataManeger.Instance.unitParam.HP_max)
+        {
+            unitParam.HP_current += (int)((float)unitParam.HP_max * 0.3f);
+            if(unitParam.HP_current >= unitParam.HP_max)
+            {
+                unitParam.HP_current = unitParam.HP_max;
+            }
+            SetHP(unitParam.HP_current);
+        }
+
         unitController.textHP.text = DataManeger.Instance.unitParam.HP_current + "/" + DataManeger.Instance.unitParam.HP_max; ;
     }
 
