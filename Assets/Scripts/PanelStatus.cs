@@ -12,6 +12,7 @@ public class PanelStatus : MonoBehaviour
     public int pointVITNum;
     public int pointAGINum;
     public int pointLUKNum;
+    private int current_weaponID;
     public DataUnitParam unitParam;
     public Button getPointATK;
     public Button getPointVIT;
@@ -22,10 +23,13 @@ public class PanelStatus : MonoBehaviour
     public TextMeshProUGUI pointVIT;
     public TextMeshProUGUI pointAGI;
     public TextMeshProUGUI pointLUK;
+    private UnitController unitController;
 
 
     private void OnEnable()
     {
+        System.Type type = typeof(UnitController);
+        unitController = (GameObject.FindObjectOfType(type) as UnitController);
         keepPointNum = DataManeger.Instance.unitParam.status;
         pointATKNum = DataManeger.Instance.unitParam.status_ATK;
         pointVITNum = DataManeger.Instance.unitParam.status_VIT;
@@ -86,9 +90,18 @@ public class PanelStatus : MonoBehaviour
         keepPoint.text = keepPointNum.ToString();
     }
 
-    public void PointDecision()
+    public void OnButtonPointDecision()
     {
+        current_weaponID = DataManeger.Instance.gameInfo.GetInt(Define.keyEquipWeaponID);
+        unitController.SetAttack(current_weaponID);
 
+        if(keepPointNum == 0)
+        {
+            DataManeger.Instance.pointer.enabled = false;
+        }
+        //PlayerPrefs.SetInt(DataUnit.status_ATK, DataManeger.Instance.unitParam.status_ATK)
+        //DataManeger.Instance.unitParam.status_ATK.Save();
+        //unitController.SetAttack(current_weaponID);
     }
 }
 

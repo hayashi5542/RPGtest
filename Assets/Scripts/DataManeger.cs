@@ -25,6 +25,7 @@ public class DataManeger : Singleton<DataManeger>
     public TextMeshProUGUI textLevel;
     public UnitController unitController;
     public Image pointer;
+    public TextMeshProUGUI potionTextNum;
    /* public Button getPointATK;
     public Button getPointVIT;
     public Button getPointAGI;
@@ -97,7 +98,16 @@ public class DataManeger : Singleton<DataManeger>
 
         textLevel.text = DataManeger.Instance.unitParam.level.ToString();
 
-        //pointer.enabled = false;
+        int potionNum = 0;
+        ItemUserParam potion = DataManeger.Instance.itemUser.list.Find(p => p.Item_ID == 1);
+        if (potion != null)
+        {
+            potionNum = potion.num;
+        }
+        potionTextNum.text = potionNum.ToString();
+
+
+        pointer.enabled = false;
     }
 
     public void LevelUp()
@@ -154,8 +164,17 @@ public class DataManeger : Singleton<DataManeger>
                 unitParam.HP_current = unitParam.HP_max;
             }
             SetHP(unitParam.HP_current);
-        }
 
+            int potionNum = 0;
+            ItemUserParam potion = DataManeger.Instance.itemUser.list.Find(p => p.Item_ID == 1);
+            potion.num -= 1;
+            if (potion != null)
+            {
+                potionNum = potion.num;
+            }
+            potionTextNum.text = potionNum.ToString();
+        }
+        
         unitController.textHP.text = DataManeger.Instance.unitParam.HP_current + "/" + DataManeger.Instance.unitParam.HP_max; ;
     }
 

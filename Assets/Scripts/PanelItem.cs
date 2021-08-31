@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class PanelItem : MonoBehaviour
 {
     public List<TextMeshProUGUI> NumTextList;
     public TextMeshProUGUI potionTextNum;
+    public Button heal;
 
     private void OnEnable()
     {
@@ -36,6 +38,18 @@ public class PanelItem : MonoBehaviour
         }
         potionTextNum.text = potionNum.ToString();
     }
+
+    /*public void Heal()
+    {
+        DataManeger.Instance.OnButtonHeal();
+        int potionNum = 0;
+        ItemUserParam potion = DataManeger.Instance.itemUser.list.Find(p => p.Item_ID == 1);
+        if (potion != null)
+        {
+            potionNum = potion.num;
+        }
+        potionTextNum.text = potionNum.ToString();
+    }*/
     // Start is called before the first frame update
     void Start()
     {

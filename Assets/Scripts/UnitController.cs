@@ -20,7 +20,8 @@ public class UnitController : StateMachineBase<UnitController>
     private ButtonController buttonController;
     public int playerLevel;
     public int playerAttack;
-    public int weaponAttack; 
+    public int weaponAttack;
+    public int statusAttack;
     private PanelSwordStanby panelSwordStanby;
     private int current_weaponID;
     public TextMeshProUGUI textHP;
@@ -49,7 +50,8 @@ public class UnitController : StateMachineBase<UnitController>
 
         current_weaponID = DataManeger.Instance.gameInfo.GetInt(Define.keyEquipWeaponID);
         SetAttack(current_weaponID);
-        pointSign.enabled = false;
+        //DataManeger.Instance.pointer.enabled = false;
+        //pointSign.enabled = false;
         
 
         //playerLevel = DataManeger.Instance.gameHUD.textLevel;
@@ -104,7 +106,9 @@ public class UnitController : StateMachineBase<UnitController>
         //Debug.Log("SetAttack");
         WeaponUnitParam weapon = DataManeger.Instance.weaponUnit.list.Find(p => p.Weapon_ID == _weaponID);
         weaponAttack = weapon.Attack;
-        playerAttack = (playerLevel * 2) + weaponAttack;
+        statusAttack = DataManeger.Instance.unitParam.status_ATK;
+
+        playerAttack = (playerLevel * 2) + weaponAttack + statusAttack*1;
     }
 
     public void Damaged(int p_damage)
@@ -132,7 +136,7 @@ public class UnitController : StateMachineBase<UnitController>
         player_EXP += _EXP;
         DataManeger.Instance.unitParam.EXP_current += _EXP;
         
-        if (player_EXP >= EXP_max) 
+        if (player_EXP >= EXP_max) //レベルアップしたとき
         {
             //playerLevel += 1;
             playerLevel += 1;
@@ -148,7 +152,7 @@ public class UnitController : StateMachineBase<UnitController>
             DataManeger.Instance.unitParam.EXP_max += 10;
 
             DataManeger.Instance.unitParam.status += 3;
-            pointSign.enabled = true;
+            DataManeger.Instance.pointer.enabled = true;
         }
         DataManeger.Instance.SetEXP(DataManeger.Instance.unitParam.EXP_current, DataManeger.Instance.unitParam.EXP_max);
         textEXP.text = DataManeger.Instance.unitParam.EXP_current + "/" + DataManeger.Instance.unitParam.EXP_max;
