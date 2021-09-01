@@ -12,6 +12,7 @@ public class EnemyController : StateMachineBase<EnemyController>
     //private GameObject player;
     private UnityEvent AttackHitHandler = new UnityEvent();
     private UnityEvent AttackEndHandler = new UnityEvent();
+    public int HP_max = 500;
     public int HP;
     public float ground_Hight;
     private float Attack_delay;
@@ -23,7 +24,11 @@ public class EnemyController : StateMachineBase<EnemyController>
         animator = GetComponent<Animator>();
         SetState(new EnemyController.Idol(this));
         EnemyManager.Instance.Add(this);
-        HP = 500;
+        if(HP_max <= 0)
+        {
+            HP_max = 500;
+        }
+        HP = HP_max;
         ground_Hight = 5;
         
     }
@@ -248,7 +253,7 @@ public class EnemyController : StateMachineBase<EnemyController>
         public override void OnExitState()
         {
             //base.OnExitState();
-            machine.HP = 5;
+            machine.HP = machine.HP_max;
             machine.animator.SetTrigger("IdleTrigger");
             machine.transform.position = new Vector3(machine.transform.position.x, machine.ground_Hight, machine.transform.position.z);
         }

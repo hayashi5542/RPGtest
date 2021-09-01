@@ -95,7 +95,11 @@ public class PanelStatus : MonoBehaviour
         current_weaponID = DataManeger.Instance.gameInfo.GetInt(Define.keyEquipWeaponID);
         unitController.SetAttack(current_weaponID);
 
-        if(keepPointNum == 0)
+        
+        DataManeger.Instance.unitParam.status_ATK = pointATKNum;
+        DataManeger.Instance.dataUnit.list[0]
+        DataManeger.Instance.dataUnit.Save();
+        if (keepPointNum == 0)
         {
             DataManeger.Instance.pointer.enabled = false;
         }
