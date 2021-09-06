@@ -21,6 +21,7 @@ public class UnitController : StateMachineBase<UnitController>
     public int playerLevel;
     public int playerAttack;
     public int weaponAttack;
+    public int weaponAttackPlus;
     public int statusAttack;
     private PanelSwordStanby panelSwordStanby;
     private int current_weaponID;
@@ -105,10 +106,11 @@ public class UnitController : StateMachineBase<UnitController>
     {
         //Debug.Log("SetAttack");
         WeaponUnitParam weapon = DataManeger.Instance.weaponUnit.list.Find(p => p.Weapon_ID == _weaponID);
-        weaponAttack = weapon.Attack;
+        WeaponUserParam weaponUser = DataManeger.Instance.weaponUser.list.Find(p => p.Weapon_ID == _weaponID);
+        weaponAttack = weapon.Attack + weaponUser.craft_count;
         statusAttack = DataManeger.Instance.unitParam.status_ATK;
 
-        playerAttack = (playerLevel * 2) + weaponAttack + statusAttack*1;
+        playerAttack = playerLevel + weaponAttack + statusAttack;
     }
 
     public void Damaged(int p_damage)

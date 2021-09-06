@@ -92,17 +92,23 @@ public class PanelStatus : MonoBehaviour
 
     public void OnButtonPointDecision()
     {
-        current_weaponID = DataManeger.Instance.gameInfo.GetInt(Define.keyEquipWeaponID);
-        unitController.SetAttack(current_weaponID);
+        //current_weaponID = DataManeger.Instance.gameInfo.GetInt(Define.keyEquipWeaponID);
+        //unitController.SetAttack(current_weaponID);
 
-        
+        DataManeger.Instance.unitParam.status = keepPointNum;
         DataManeger.Instance.unitParam.status_ATK = pointATKNum;
-        DataManeger.Instance.dataUnit.list[0]
+        DataManeger.Instance.unitParam.status_VIT = pointVITNum;
+        DataManeger.Instance.unitParam.status_AGI = pointAGINum;
+        DataManeger.Instance.unitParam.status_LUK = pointLUKNum;
+        //DataManeger.Instance.dataUnit.list[0];
         DataManeger.Instance.dataUnit.Save();
         if (keepPointNum == 0)
         {
             DataManeger.Instance.pointer.enabled = false;
         }
+
+        current_weaponID = DataManeger.Instance.gameInfo.GetInt(Define.keyEquipWeaponID);
+        unitController.SetAttack(current_weaponID);
         //PlayerPrefs.SetInt(DataUnit.status_ATK, DataManeger.Instance.unitParam.status_ATK)
         //DataManeger.Instance.unitParam.status_ATK.Save();
         //unitController.SetAttack(current_weaponID);

@@ -394,7 +394,7 @@ namespace anogamelib
 			catch
 			{
 				;// 特に何をするわけでもない
-				Debug.LogError("no set savefilename");
+				//Debug.LogError("no set savefilename");
 			}
 		}
 		public void Save(string _strFilename)

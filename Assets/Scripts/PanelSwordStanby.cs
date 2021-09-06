@@ -9,8 +9,9 @@ public class PanelSwordStanby : MonoBehaviour
 {
     public TextMeshProUGUI weapon_name;
     public TextMeshProUGUI weapon_AttackNum;
+    public TextMeshProUGUI weapon_PlasAttackNum;
     private UnitController unitController;
-    private DataManeger dataManeger;
+    public DataManeger dataManeger;
     public Image weapon_icon;
     public Button left;
     public Button right;
@@ -22,6 +23,7 @@ public class PanelSwordStanby : MonoBehaviour
     public Image weapon_craftItem;
     public int craftItemID;
     public int weaponAttack;
+    public int weaponAttackPlus;
 
     private void Start()
     {
@@ -49,6 +51,7 @@ public class PanelSwordStanby : MonoBehaviour
     private void ShowWeapon(int _weaponID)
     {
         WeaponUnitParam weapon = DataManeger.Instance.weaponUnit.list.Find(p => p.Weapon_ID == _weaponID);
+        WeaponUserParam weaponUser = DataManeger.Instance.weaponUser.list.Find(p => p.Weapon_ID == _weaponID);
         ItemUnitParam item = DataManeger.Instance.itemUnit.list.Find(p => p.Item_ID == weapon.CraftItem_ID);
         ItemUserParam itemUser = DataManeger.Instance.itemUser.list.Find(p => p.Item_ID == weapon.CraftItem_ID);
         int itemNum;
@@ -65,11 +68,15 @@ public class PanelSwordStanby : MonoBehaviour
         Debug.Log(itemNum);
 
         weapon_name.text = weapon.Weapon_name;
+         
         weapon_icon.sprite = SpriteManager.Instance.Get(weapon.Sprite_Name);
         weapon_craftItem.sprite = SpriteManager.Instance.Get(item.Sprite_Name);
         
         weaponAttack = weapon.Attack;
         weapon_AttackNum.text = weaponAttack.ToString();
+
+        weaponAttackPlus = weaponUser.craft_count;
+        weapon_PlasAttackNum.text = weaponAttackPlus.ToString();
 
         int left_wepon_ID = _weaponID - 1;
         WeaponUnitParam left_weapon = DataManeger.Instance.weaponUnit.list.Find(p => p.Weapon_ID == left_wepon_ID);
@@ -133,8 +140,10 @@ public class PanelSwordStanby : MonoBehaviour
 
     public void PowerUpButton()
     {
-            unitController.weaponAttack += 2;
-            dataManeger.PowerUP(current_weaponID);
+        dataManeger.PowerUP(current_weaponID);
+        ShowWeapon(current_weaponID);
+        unitController.SetAttack(current_weaponID);
+        DataManeger.Instance.weaponUser.Save();
     }
 
     public void WeaponAttack()
