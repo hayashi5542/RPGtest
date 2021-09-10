@@ -29,11 +29,13 @@ public class UnitController : StateMachineBase<UnitController>
     public TextMeshProUGUI textEXP;
     public TextMeshProUGUI textLevel;
     public Image pointSign;
+    public GameObject gameOverPanel;
     
     private void Start()
     {
         animator = GetComponent<Animator>();
         buttonController = GetComponent<ButtonController>();
+        gameOverPanel = GetComponent<GameObject>();
         //animator.SetBool("ModeFight", true);
         //animator.SetBool("ModeEscape", false);
         unitmover = GetComponent<UnitMover>();
@@ -276,6 +278,7 @@ public class UnitController : StateMachineBase<UnitController>
         {
             base.OnEnterState();
             machine.animator.SetTrigger("DieTrigger");
+            //machine.gameOverPanel.SetActive(true);
         }
 
         public override void OnUpdateState()
